@@ -47,6 +47,11 @@ class WeatherData {
       cod: json['cod'],
     );
   }
+
+  String toString() {
+    return 'WeatherData{coord: $coord, weather: $weather, base: $base, main: $main, visibility: $visibility, '
+        'wind: $wind, clouds: $clouds, dt: $dt, sys: $sys, timezone: $timezone, id: $id, name: $name, cod: $cod}';
+  }
 }
 
 class Clouds {
@@ -110,18 +115,18 @@ class Main {
 }
 
 class Sys {
-  final int type;
-  final int id;
-  final String country;
-  final int sunrise;
-  final int sunset;
+  final int? type;
+  final int? id;
+  final String? country;
+  final int? sunrise;
+  final int? sunset;
 
   Sys({
-    required this.type,
-    required this.id,
-    required this.country,
-    required this.sunrise,
-    required this.sunset,
+    this.type,
+    this.id,
+    this.country,
+    this.sunrise,
+    this.sunset,
   });
 
   factory Sys.fromJson(Map<String, dynamic> json) {
