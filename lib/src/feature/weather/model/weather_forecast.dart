@@ -1,5 +1,5 @@
-/// Погода в городе по часам
-class CityWeather {
+/// Погода с прогнозом по часам
+class WeatherForecast {
   final double lat;
   final double lon;
   final String timezone;
@@ -7,7 +7,7 @@ class CityWeather {
   final CurrentWeather currentWeather;
   final List<HourlyWeather> hourlyWeather;
 
-  CityWeather({
+  WeatherForecast({
     required this.lat,
     required this.lon,
     required this.timezone,
@@ -16,11 +16,11 @@ class CityWeather {
     required this.hourlyWeather,
   });
 
-  factory CityWeather.fromJson(Map<String, dynamic> json) {
+  factory WeatherForecast.fromJson(Map<String, dynamic> json) {
     var list = json['hourly'] as List;
     List<HourlyWeather> hourlyWeatherList = list.map((i) => HourlyWeather.fromJson(i)).toList();
 
-    return CityWeather(
+    return WeatherForecast(
       lat: json['lat'],
       lon: json['lon'],
       timezone: json['timezone'],

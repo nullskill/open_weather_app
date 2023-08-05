@@ -1,5 +1,5 @@
-/// Погода в текущем местоположении
-class LocationWeather {
+/// Погода в базовом виде
+class WeatherData {
   final Coord coord;
   final List<Weather> weather;
   final String base;
@@ -14,7 +14,7 @@ class LocationWeather {
   final String name;
   final int cod;
 
-  LocationWeather({
+  WeatherData({
     required this.coord,
     required this.weather,
     required this.base,
@@ -30,8 +30,8 @@ class LocationWeather {
     required this.cod,
   });
 
-  factory LocationWeather.fromJson(Map<String, dynamic> json) {
-    return LocationWeather(
+  factory WeatherData.fromJson(Map<String, dynamic> json) {
+    return WeatherData(
       coord: Coord.fromJson(json['coord']),
       weather: List<Weather>.from(json['weather'].map((x) => Weather.fromJson(x))),
       base: json['base'],
