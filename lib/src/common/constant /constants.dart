@@ -8,5 +8,6 @@ class Constants {
   static const String baseUrlApi = protocol + hostApi;
   static const String weatherApiVersion = '2.5';
   static const String oneCallApiVersion = '3.0';
+  static const String measurementUnit = 'metric';
   static const String apiKey = '';
 }
