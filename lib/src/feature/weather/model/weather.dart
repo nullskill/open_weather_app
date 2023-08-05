@@ -1,5 +1,5 @@
-/// Модель для получения данных о погоде через `weather API`
-class WeatherData {
+/// Погода в текущем местоположении
+class LocationWeather {
   final Coord coord;
   final List<Weather> weather;
   final String base;
@@ -14,7 +14,7 @@ class WeatherData {
   final String name;
   final int cod;
 
-  WeatherData({
+  LocationWeather({
     required this.coord,
     required this.weather,
     required this.base,
@@ -30,8 +30,8 @@ class WeatherData {
     required this.cod,
   });
 
-  factory WeatherData.fromJson(Map<String, dynamic> json) {
-    return WeatherData(
+  factory LocationWeather.fromJson(Map<String, dynamic> json) {
+    return LocationWeather(
       coord: Coord.fromJson(json['coord']),
       weather: List<Weather>.from(json['weather'].map((x) => Weather.fromJson(x))),
       base: json['base'],
