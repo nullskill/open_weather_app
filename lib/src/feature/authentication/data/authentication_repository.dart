@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:open_weather_app/src/feature/authentication/model/user.dart';
 
-abstract class IAuthRepository {
+abstract class IAuthenticationRepository {
   Stream<User> get user;
   Future<void> signup({
     required String email,
@@ -16,10 +16,10 @@ abstract class IAuthRepository {
   Future<void> logOut();
 }
 
-class AuthRepository {
+class AuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
 
-  AuthRepository({
+  AuthenticationRepository({
     firebase_auth.FirebaseAuth? firebaseAuth,
   }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
