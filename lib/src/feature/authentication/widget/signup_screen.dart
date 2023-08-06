@@ -13,7 +13,7 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Signup')),
+      appBar: AppBar(title: const Text('Регистрация')),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: BlocProvider<SignUpCubit>(
@@ -62,7 +62,7 @@ class _EmailInput extends StatelessWidget {
           onChanged: (email) {
             context.read<SignUpCubit>().emailChanged(email);
           },
-          decoration: const InputDecoration(labelText: 'email'),
+          decoration: const InputDecoration(labelText: 'Email'),
         );
       },
     );
@@ -79,7 +79,7 @@ class _PasswordInput extends StatelessWidget {
           onChanged: (password) {
             context.read<SignUpCubit>().passwordChanged(password);
           },
-          decoration: const InputDecoration(labelText: 'password'),
+          decoration: const InputDecoration(labelText: 'Пароль'),
           obscureText: true,
         );
       },
@@ -104,7 +104,7 @@ class _SignUpButton extends StatelessWidget {
                   context.read<SignUpCubit>().signupFormSubmitted();
                 },
                 child: const Text(
-                  'SIGN UP',
+                  'Зарегистрироваться',
                   style: TextStyle(color: Colors.white),
                 ),
               );
