@@ -28,7 +28,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
       try {
         position = await Geolocator.getCurrentPosition(
           forceAndroidLocationManager: true,
-          timeLimit: const Duration(seconds: 10),
+          timeLimit: const Duration(seconds: 5),
         );
       } catch (e) {
         position = await Geolocator.getLastKnownPosition(forceAndroidLocationManager: true);
