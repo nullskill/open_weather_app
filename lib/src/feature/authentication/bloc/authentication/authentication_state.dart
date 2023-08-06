@@ -1,9 +1,9 @@
 part of 'authentication_bloc.dart';
 
-enum AppStatus { authenticated, unauthenticated }
+enum AuthStatus { authenticated, unauthenticated }
 
 class AuthenticationState {
-  final AppStatus status;
+  final AuthStatus status;
   final User user;
 
   const AuthenticationState._({
@@ -13,20 +13,17 @@ class AuthenticationState {
 
   const AuthenticationState.authenticated(User user)
       : this._(
-          status: AppStatus.authenticated,
+          status: AuthStatus.authenticated,
           user: user,
         );
 
-  const AuthenticationState.unauthenticated() : this._(status: AppStatus.unauthenticated);
-
+  const AuthenticationState.unauthenticated() : this._(status: AuthStatus.unauthenticated);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
-    return other is AuthenticationState &&
-      other.status == status &&
-      other.user == user;
+
+    return other is AuthenticationState && other.status == status && other.user == user;
   }
 
   @override

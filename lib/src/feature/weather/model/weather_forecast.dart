@@ -30,6 +30,7 @@ class WeatherForecast {
     );
   }
 
+  @override
   String toString() {
     return 'WeatherForecast{lat: $lat, lon: $lon, timezone: $timezone, timezoneOffset: $timezoneOffset, '
         'currentWeather: $currentWeather, hourlyWeather: $hourlyWeather}';

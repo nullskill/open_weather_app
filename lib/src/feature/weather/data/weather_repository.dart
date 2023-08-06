@@ -13,6 +13,7 @@ class WeatherRepository implements IWeatherRepository {
 
   WeatherRepository(this._apiClient);
 
+  @override
   Future<WeatherData> getWeatherData(Coord coord) async {
     final url = '${Constants.baseUrlApi}/${Constants.weatherApiVersion}/weather'
         '?lat=${coord.lat}&lon=${coord.lat}'
@@ -24,6 +25,7 @@ class WeatherRepository implements IWeatherRepository {
     return weatherData;
   }
 
+  @override
   Future<WeatherForecast> getWeatherForecast(Coord coord) async {
         final url = '${Constants.baseUrlApi}/${Constants.oneCallApiVersion}/onecall'
         '?lat=${coord.lat}&lon=${coord.lat}'
