@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_weather_app/firebase_options.dart';
 import 'package:open_weather_app/src/common/routes/routes.dart';
+import 'package:open_weather_app/src/common/theme/theme.dart';
 import 'package:open_weather_app/src/feature/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:open_weather_app/src/feature/authentication/data/authentication_repository.dart';
 
@@ -43,6 +44,7 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: appTheme,
       home: FlowBuilder<AuthStatus>(
         state: context.select((AuthenticationBloc bloc) => bloc.state.status),
         onGeneratePages: onGenerateAppViewPages,
