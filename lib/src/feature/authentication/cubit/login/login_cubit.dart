@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_weather_app/src/feature/authentication/data/authentication_repository.dart';
+import 'package:open_weather_app/src/feature/authentication/model/firebase_auth_exception.dart';
 
 part 'login_state.dart';
 
@@ -35,6 +37,11 @@ class LoginCubit extends Cubit<LoginState> {
         password: state.password,
       );
       emit(state.copyWith(status: LoginStatus.success));
-    } catch (_) {}
+    } on FirebaseAuthException catch (error) {
+      emit(state.copyWith(
+        status: LoginStatus.error,
+        message: error.getAppFirebaseAuthExceptionType().message,
+      ));
+    }
   }
 }

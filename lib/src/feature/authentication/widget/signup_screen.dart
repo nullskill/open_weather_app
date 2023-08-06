@@ -35,7 +35,14 @@ class SignUpForm extends StatelessWidget {
         if (state.status == SignUpStatus.success) {
           Navigator.of(context).pop();
         } else if (state.status == SignUpStatus.error) {
-          // Nothing for now.
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
         }
       },
       child: Column(

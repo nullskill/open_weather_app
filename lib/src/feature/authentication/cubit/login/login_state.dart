@@ -5,11 +5,13 @@ enum LoginStatus { initial, submitting, success, error }
 class LoginState {
   final String email;
   final String password;
+  final String message;
   final LoginStatus status;
 
   const LoginState({
     required this.email,
     required this.password,
+    required this.message,
     required this.status,
   });
 
@@ -17,6 +19,7 @@ class LoginState {
     return const LoginState(
       email: '',
       password: '',
+      message: '',
       status: LoginStatus.initial,
     );
   }
@@ -24,11 +27,13 @@ class LoginState {
   LoginState copyWith({
     String? email,
     String? password,
+    String? message,
     LoginStatus? status,
   }) {
     return LoginState(
       email: email ?? this.email,
       password: password ?? this.password,
+      message: message ?? this.message,
       status: status ?? this.status,
     );
   }
@@ -40,9 +45,15 @@ class LoginState {
     return other is LoginState &&
       other.email == email &&
       other.password == password &&
+      other.message == message &&
       other.status == status;
   }
 
   @override
-  int get hashCode => email.hashCode ^ password.hashCode ^ status.hashCode;
+  int get hashCode {
+    return email.hashCode ^
+      password.hashCode ^
+      message.hashCode ^
+      status.hashCode;
+  }
 }

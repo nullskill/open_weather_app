@@ -5,11 +5,13 @@ enum SignUpStatus { initial, submitting, success, error }
 class SignUpState {
   final String email;
   final String password;
+  final String message;
   final SignUpStatus status;
 
   const SignUpState({
     required this.email,
     required this.password,
+    required this.message,
     required this.status,
   });
 
@@ -17,6 +19,7 @@ class SignUpState {
     return const SignUpState(
       email: '',
       password: '',
+      message: '',
       status: SignUpStatus.initial,
     );
   }
@@ -24,11 +27,13 @@ class SignUpState {
   SignUpState copyWith({
     String? email,
     String? password,
+    String? message,
     SignUpStatus? status,
   }) {
     return SignUpState(
       email: email ?? this.email,
       password: password ?? this.password,
+      message: message ?? this.message,
       status: status ?? this.status,
     );
   }
@@ -40,9 +45,15 @@ class SignUpState {
     return other is SignUpState &&
       other.email == email &&
       other.password == password &&
+      other.message == message &&
       other.status == status;
   }
 
   @override
-  int get hashCode => email.hashCode ^ password.hashCode ^ status.hashCode;
+  int get hashCode {
+    return email.hashCode ^
+      password.hashCode ^
+      message.hashCode ^
+      status.hashCode;
+  }
 }
