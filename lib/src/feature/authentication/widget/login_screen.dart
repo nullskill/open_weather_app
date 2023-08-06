@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:open_weather_app/src/common/widget/action_button.dart';
 import 'package:open_weather_app/src/feature/authentication/cubit/login/login_cubit.dart';
 import 'package:open_weather_app/src/feature/authentication/data/authentication_repository.dart';
 import 'package:open_weather_app/src/feature/authentication/widget/signup_screen.dart';
@@ -51,7 +52,10 @@ class LoginForm extends StatelessWidget {
           const SizedBox(height: 8),
           _LoginButton(),
           const SizedBox(height: 8),
-          _SignUpButton(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
+            child: _SignUpButton(),
+          ),
         ],
       ),
     );
@@ -101,14 +105,12 @@ class _LoginButton extends StatelessWidget {
       builder: (context, state) {
         return state.status == LoginStatus.submitting
             ? const CircularProgressIndicator()
-            : ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(200, 40),
+            : Padding(
+                padding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
+                child: ActionButton(
+                  text: 'Войти',
+                  onPressed: () => context.read<LoginCubit>().logInWithCredentials(),
                 ),
-                onPressed: () {
-                  context.read<LoginCubit>().logInWithCredentials();
-                },
-                child: const Text('Войти'),
               );
       },
     );
@@ -118,16 +120,10 @@ class _LoginButton extends StatelessWidget {
 class _SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        fixedSize: const Size(200, 40),
-      ),
+    return ActionButton(
+      text: 'Зарегистрироваться',
+      inverted: true,
       onPressed: () => Navigator.of(context).push<void>(SignUpScreen.route()),
-      child: const Text(
-        'Зарегистрироваться',
-        style: TextStyle(color: Colors.blue),
-      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:open_weather_app/src/common/widget/action_button.dart';
 import 'package:open_weather_app/src/feature/authentication/cubit/signup/signup_cubit.dart';
 import 'package:open_weather_app/src/feature/authentication/data/authentication_repository.dart';
 
@@ -52,7 +53,10 @@ class SignUpForm extends StatelessWidget {
           const SizedBox(height: 8),
           _PasswordInput(),
           const SizedBox(height: 8),
-          _SignUpButton(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+            child: _SignUpButton(),
+          ),
         ],
       ),
     );
@@ -102,18 +106,9 @@ class _SignUpButton extends StatelessWidget {
       builder: (context, state) {
         return state.status == SignUpStatus.submitting
             ? const CircularProgressIndicator()
-            : ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  fixedSize: const Size(200, 40),
-                ),
-                onPressed: () {
-                  context.read<SignUpCubit>().signupFormSubmitted();
-                },
-                child: const Text(
-                  'Зарегистрироваться',
-                  style: TextStyle(color: Colors.white),
-                ),
+            : ActionButton(
+                text: 'Зарегистрироваться',
+                onPressed: () => context.read<SignUpCubit>().signUpFormSubmitted(),
               );
       },
     );

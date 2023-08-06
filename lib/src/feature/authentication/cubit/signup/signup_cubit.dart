@@ -28,7 +28,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     );
   }
 
-  Future<void> signupFormSubmitted() async {
+  Future<void> signUpFormSubmitted() async {
     if (state.status == SignUpStatus.submitting) return;
     emit(state.copyWith(status: SignUpStatus.submitting));
     try {
