@@ -38,8 +38,13 @@ class WeatherScreen extends StatelessWidget {
             if (state is LocationLoadSuccess) {
               final Position(latitude: lat, longitude: lon) = state.position;
               return Center(
-                child: Text(
-                  'Location: ($lat, $lon)',
+                child: Column(
+                  children: [
+                    Text(
+                      'Location: ($lat, $lon)',
+                    ),
+                    Image.asset('assets/images/sun.png'),
+                  ],
                 ),
               );
             }
