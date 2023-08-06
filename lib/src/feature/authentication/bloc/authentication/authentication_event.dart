@@ -5,7 +5,9 @@ abstract class AuthenticationEvent {
   const AuthenticationEvent();
 }
 
-class AuthenticationLogoutRequested extends AuthenticationEvent {}
+class AuthenticationLogoutRequested extends AuthenticationEvent {
+  const AuthenticationLogoutRequested();
+}
 
 class AuthenticationUserChanged extends AuthenticationEvent {
   const AuthenticationUserChanged(this.user);

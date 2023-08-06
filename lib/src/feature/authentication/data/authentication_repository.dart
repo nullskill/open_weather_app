@@ -5,7 +5,7 @@ import 'package:open_weather_app/src/feature/authentication/model/user.dart';
 
 abstract class IAuthenticationRepository {
   Stream<User> get user;
-  Future<void> signup({
+  Future<void> signUp({
     required String email,
     required String password,
   });
@@ -33,7 +33,7 @@ class AuthenticationRepository {
     });
   }
 
-  Future<void> signup({
+  Future<void> signUp({
     required String email,
     required String password,
   }) async {
