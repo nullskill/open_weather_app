@@ -5,6 +5,7 @@ const kSecondaryTextColor = Color(0xFF8799A5);
 const kTertiaryTextColor = Color(0xFFE4E6EC);
 const kActiveTextColor = Color(0xFF0700FF);
 const kCursorTextColor = Color(0xFFFF585D);
+const kGradientColor = Color(0xFF0700FF);
 
 final appTheme = ThemeData(
   brightness: Brightness.light,
