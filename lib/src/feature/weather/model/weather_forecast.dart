@@ -73,15 +73,15 @@ class CurrentWeather {
       dt: json['dt'],
       sunrise: json['sunrise'],
       sunset: json['sunset'],
-      temp: json['temp'],
-      feelsLike: json['feels_like'],
+      temp: json['temp'].toDouble(),
+      feelsLike: json['feels_like'].toDouble(),
       pressure: json['pressure'],
       humidity: json['humidity'],
-      dewPoint: json['dew_point'],
-      uvi: json['uvi'],
+      dewPoint: json['dew_point'].toDouble(),
+      uvi: json['uvi'].toDouble(),
       clouds: json['clouds'],
       visibility: json['visibility'],
-      windSpeed: json['wind_speed'],
+      windSpeed: json['wind_speed'].toDouble(),
       windDeg: json['wind_deg'],
     );
   }
@@ -121,18 +121,18 @@ class HourlyWeather {
   factory HourlyWeather.fromJson(Map<String, dynamic> json) {
     return HourlyWeather(
       dt: json['dt'],
-      temp: (json['temp'] as num).toDouble(),
-      feelsLike: (json['feels_like'] as num).toDouble(),
+      temp: json['temp'].toDouble(),
+      feelsLike: json['feels_like'].toDouble(),
       pressure: json['pressure'],
       humidity: json['humidity'],
-      dewPoint: (json['dew_point'] as num).toDouble(),
-      uvi: (json['uvi'] as num).toDouble(),
+      dewPoint: json['dew_point'].toDouble(),
+      uvi: json['uvi'].toDouble(),
       clouds: json['clouds'],
       visibility: json['visibility'],
-      windSpeed: (json['wind_speed'] as num).toDouble(),
+      windSpeed: json['wind_speed'].toDouble(),
       windDeg: json['wind_deg'],
-      windGust: (json['wind_gust'] as num).toDouble(),
-      pop: (json['pop'] as num).toDouble(),
+      windGust: json['wind_gust'].toDouble(),
+      pop: json['pop'].toDouble(),
     );
   }
 }

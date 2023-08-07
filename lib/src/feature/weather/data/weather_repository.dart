@@ -18,7 +18,8 @@ class WeatherRepository implements IWeatherRepository {
     final url = '${Constants.baseUrlApi}/${Constants.weatherApiVersion}/weather'
         '?lat=${coord.lat}&lon=${coord.lat}'
         '&units=${Constants.measurementUnit}'
-        '&appid=${Constants.apiKey}';
+        '&appid=${Constants.apiKey}'
+        '&lang=ru';
     final response = await _apiClient.get(url);
     final weatherData = WeatherData.fromJson(response.data);
 
@@ -27,11 +28,12 @@ class WeatherRepository implements IWeatherRepository {
 
   @override
   Future<WeatherForecast> getWeatherForecast(Coord coord) async {
-        final url = '${Constants.baseUrlApi}/${Constants.oneCallApiVersion}/onecall'
+    final url = '${Constants.baseUrlApi}/${Constants.oneCallApiVersion}/onecall'
         '?lat=${coord.lat}&lon=${coord.lat}'
         '&exclude=minutely,daily,alerts'
         '&units=${Constants.measurementUnit}'
-        '&appid=${Constants.apiKey}';
+        '&appid=${Constants.apiKey}'
+        '&lang=ru';
     final response = await _apiClient.get(url);
     final weatherForecast = WeatherForecast.fromJson(response.data);
 
