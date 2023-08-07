@@ -44,11 +44,13 @@ class SignUpScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: BlocProvider<SignUpCubit>(
-          create: (_) => SignUpCubit(context.read<AuthenticationRepository>()),
-          child: const SignUpForm(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: BlocProvider<SignUpCubit>(
+            create: (_) => SignUpCubit(context.read<AuthenticationRepository>()),
+            child: const SignUpForm(),
+          ),
         ),
       ),
     );

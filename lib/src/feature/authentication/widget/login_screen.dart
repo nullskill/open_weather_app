@@ -43,11 +43,13 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-        child: BlocProvider(
-          create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
-          child: const LoginForm(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          child: BlocProvider(
+            create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
+            child: const LoginForm(),
+          ),
         ),
       ),
     );
