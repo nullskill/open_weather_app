@@ -1,4 +1,4 @@
-class Constants {
+sealed class Constants {
   /// Константы для API
   static const bundleId = 'ru.larkin.open_weather_app';
 

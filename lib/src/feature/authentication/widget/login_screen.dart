@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:open_weather_app/src/common/theme/theme.dart';
 import 'package:open_weather_app/src/common/widget/action_button.dart';
 import 'package:open_weather_app/src/feature/authentication/cubit/login/login_cubit.dart';
 import 'package:open_weather_app/src/feature/authentication/data/authentication_repository.dart';
@@ -13,9 +14,36 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Вход')),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(82),
+          child: SizedBox(
+            height: 82,
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Вход',
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 28),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Введите данные для входа',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(color: kSecondaryTextColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         child: BlocProvider(
           create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
           child: const LoginForm(),
@@ -44,18 +72,14 @@ class LoginForm extends StatelessWidget {
         }
       },
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _EmailInput(),
-          const SizedBox(height: 8),
+          const SizedBox(height: 32),
           _PasswordInput(),
-          const SizedBox(height: 8),
+          const SizedBox(height: 48),
           _LoginButton(),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
-            child: _SignUpButton(),
-          ),
+          const SizedBox(height: 18),
+          _SignUpButton(),
         ],
       ),
     );
@@ -89,7 +113,9 @@ class _PasswordInput extends StatelessWidget {
           onChanged: (password) {
             context.read<LoginCubit>().passwordChanged(password);
           },
-          decoration: const InputDecoration(labelText: 'Пароль'),
+          decoration: const InputDecoration(
+            labelText: 'Пароль',
+          ),
           obscureText: true,
         );
       },
@@ -105,12 +131,9 @@ class _LoginButton extends StatelessWidget {
       builder: (context, state) {
         return state.status == LoginStatus.submitting
             ? const CircularProgressIndicator()
-            : Padding(
-                padding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
-                child: ActionButton(
-                  text: 'Войти',
-                  onPressed: () => context.read<LoginCubit>().logInWithCredentials(),
-                ),
+            : ActionButton(
+                text: 'Войти',
+                onPressed: () => context.read<LoginCubit>().logInWithCredentials(),
               );
       },
     );

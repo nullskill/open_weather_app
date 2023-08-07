@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_weather_app/src/common/theme/theme.dart';
 
 class ActionButton extends StatelessWidget {
   final String text;
@@ -17,8 +18,8 @@ class ActionButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: inverted ? Colors.grey[200] : const Color(0xFF0700FF),
-        foregroundColor: inverted ? const Color(0xFF0700FF) : Colors.white,
+        backgroundColor: inverted ? Colors.grey[200] : kActiveTextColor,
+        foregroundColor: inverted ? kActiveTextColor : Colors.white,
         minimumSize: const Size.fromHeight(48),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
