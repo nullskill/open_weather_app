@@ -9,5 +9,5 @@ sealed class Constants {
   static const String weatherApiVersion = '2.5';
   static const String oneCallApiVersion = '3.0';
   static const String measurementUnit = 'metric';
-  static const String apiKey = '';
+  static const String apiKey = '784e44e13d861100a7c64d15329879ea';
 }
