@@ -96,10 +96,11 @@ class _EmailInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
         return TextField(
+          decoration: const InputDecoration(labelText: 'Email'),
+          textInputAction: TextInputAction.next,
           onChanged: (email) {
             context.read<LoginCubit>().emailChanged(email);
           },
-          decoration: const InputDecoration(labelText: 'Email'),
         );
       },
     );
@@ -120,9 +121,7 @@ class _PasswordInputState extends State<_PasswordInput> {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextField(
-          onChanged: (password) {
-            context.read<LoginCubit>().passwordChanged(password);
-          },
+          obscureText: _obscureText,
           decoration: InputDecoration(
             labelText: 'Пароль',
             suffixIcon: IconButton(
@@ -133,7 +132,10 @@ class _PasswordInputState extends State<_PasswordInput> {
               splashRadius: 20,
             ),
           ),
-          obscureText: _obscureText,
+          textInputAction: TextInputAction.done,
+          onChanged: (password) {
+            context.read<LoginCubit>().passwordChanged(password);
+          },
         );
       },
     );
