@@ -10,7 +10,7 @@ part 'authentication_state.dart';
 
 /// Блок для работы с аутентификацией
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final AuthenticationRepository _authRepository;
+  final IAuthenticationRepository _authRepository;
   StreamSubscription<User>? _userSubscription;
 
   AuthenticationBloc({required AuthenticationRepository authRepository})

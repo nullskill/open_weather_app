@@ -6,7 +6,7 @@ import 'package:open_weather_app/src/feature/authentication/model/firebase_auth_
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  final AuthenticationRepository _authenticationRepository;
+  final IAuthenticationRepository _authenticationRepository;
 
   LoginCubit(this._authenticationRepository) : super(LoginState.initial());
 

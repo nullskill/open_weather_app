@@ -16,7 +16,7 @@ abstract class IAuthenticationRepository {
   Future<void> logOut();
 }
 
-class AuthenticationRepository {
+class AuthenticationRepository implements IAuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth;
 
   AuthenticationRepository({
