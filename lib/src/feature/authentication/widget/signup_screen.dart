@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:open_weather_app/src/common/theme/theme.dart';
 import 'package:open_weather_app/src/common/widget/action_button.dart';
 import 'package:open_weather_app/src/feature/authentication/cubit/signup/signup_cubit.dart';
@@ -107,7 +108,14 @@ class _EmailInput extends StatelessWidget {
   }
 }
 
-class _PasswordInput extends StatelessWidget {
+class _PasswordInput extends StatefulWidget {
+  @override
+  State<_PasswordInput> createState() => _PasswordInputState();
+}
+
+class _PasswordInputState extends State<_PasswordInput> {
+  bool _obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(
@@ -117,8 +125,17 @@ class _PasswordInput extends StatelessWidget {
           onChanged: (password) {
             context.read<SignUpCubit>().passwordChanged(password);
           },
-          decoration: const InputDecoration(labelText: 'Пароль'),
-          obscureText: true,
+          decoration: InputDecoration(
+            labelText: 'Пароль',
+            suffixIcon: IconButton(
+              icon: SvgPicture.asset(
+                _obscureText ? 'assets/images/visibility.svg' : 'assets/images/visibility_off.svg',
+              ),
+              onPressed: () => setState(() => _obscureText = !_obscureText),
+              splashRadius: 20,
+            ),
+          ),
+          obscureText: _obscureText,
         );
       },
     );
