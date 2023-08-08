@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:open_weather_app/src/common/theme/theme.dart';
 import 'package:open_weather_app/src/feature/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:open_weather_app/src/feature/weather/bloc/location/location_bloc.dart';
@@ -143,6 +145,24 @@ class _WeatherScreenState extends State<WeatherScreen> {
 class _Body extends StatelessWidget {
   const _Body({Key? key}) : super(key: key);
 
+  String _getWeatherImage(String weatherName) {
+    switch (weatherName) {
+      case 'Thunderstorm':
+        return 'assets/images/thunderstorm.png';
+      case 'Drizzle':
+        return 'assets/images/drizzle.png';
+      case 'Rain':
+        return 'assets/images/rain.png';
+      case 'Snow':
+        return 'assets/images/snow.png';
+      case 'Clouds':
+        return 'assets/images/clouds.png';
+      case 'Clear':
+      default:
+        return 'assets/images/clear.png';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<WeatherBloc, WeatherState>(
@@ -156,7 +176,7 @@ class _Body extends StatelessWidget {
       builder: (context, state) {
         if (state is WeatherLoadSuccess) {
           final Main(:temp, :tempMin, :tempMax) = state.weatherData.main;
-          final description = state.weatherData.weather.first.description;
+          final Weather(main: weatherName, :description) = state.weatherData.weather.first;
 
           return SingleChildScrollView(
             child: Column(
@@ -187,7 +207,7 @@ class _Body extends StatelessWidget {
                       ),
                       Center(
                         child: Image.asset(
-                          'assets/images/rain.png',
+                          _getWeatherImage(weatherName),
                           height: 180,
                           width: 180,
                           fit: BoxFit.cover,
@@ -204,7 +224,7 @@ class _Body extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      description,
+                      description.characters.first.toUpperCase() + description.substring(1),
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 8),
@@ -237,8 +257,21 @@ class _Body extends StatelessWidget {
 class _Forecast extends StatelessWidget {
   const _Forecast({Key? key}) : super(key: key);
 
+  int _getHourOfDay(int dt) {
+    final date = DateTime.fromMillisecondsSinceEpoch(dt * 1000);
+    return date.hour;
+  }
+
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting();
+    final now = DateTime.now();
+    final formatter = DateFormat('d MMMM', 'ru');
+    final formattedDate = formatter.format(now);
+
+    final state = context.read<WeatherBloc>().state as WeatherLoadSuccess;
+    final hourlyWeather = state.weatherForecast.hourlyWeather;
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
@@ -257,7 +290,7 @@ class _Forecast extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text(
-                  '20 марта',
+                  formattedDate,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
@@ -274,12 +307,16 @@ class _Forecast extends StatelessWidget {
               height: 142,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 5,
+                itemCount: hourlyWeather.length,
                 itemBuilder: (context, index) {
-                  if (index == 2) {
-                    return const _CurrentHourWeather();
-                  }
-                  return const _HourWeather();
+                  final hourWeather = hourlyWeather[index];
+                  final hourOfDay = _getHourOfDay(hourWeather.dt);
+                  return _HourWeather(
+                    hourOfDay: hourOfDay,
+                    temperature: hourWeather.temp.toInt(),
+                    weather: hourWeather.weather,
+                    isCurrent: hourOfDay == now.hour,
+                  );
                 },
               ),
             ),
@@ -291,69 +328,71 @@ class _Forecast extends StatelessWidget {
 }
 
 class _HourWeather extends StatelessWidget {
-  const _HourWeather({Key? key}) : super(key: key);
+  final int hourOfDay;
+  final int temperature;
+  final Weather weather;
+  final bool isCurrent;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '12:00',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 16),
-          SvgPicture.asset(
-            'assets/images/sun_small.svg',
-            height: 32,
-            width: 32,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            '12°',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        ],
-      ),
-    );
+  const _HourWeather({
+    Key? key,
+    required this.hourOfDay,
+    required this.temperature,
+    required this.weather,
+    required this.isCurrent,
+  }) : super(key: key);
+
+  String _getWeatherImage() {
+    switch (weather.main) {
+      case 'Thunderstorm':
+        return 'assets/images/thunderstorm.svg';
+      case 'Rain':
+        return 'assets/images/rain.svg';
+      case 'Snow':
+        return 'assets/images/snow.svg';
+      case 'Clouds':
+        if (hourOfDay > 6 && hourOfDay < 20) {
+          return 'assets/images/cloud_day.svg';
+        } else {
+          return 'assets/images/cloud_night.svg';
+        }
+      case 'Clear':
+      default:
+        return 'assets/images/clear.svg';
+    }
   }
-}
-
-class _CurrentHourWeather extends StatelessWidget {
-  const _CurrentHourWeather({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.fromBorderSide(
-          BorderSide(
-            color: Colors.white.withOpacity(0.8),
-            width: 1,
-          ),
-        ),
-      ),
+      decoration: isCurrent
+          ? BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.fromBorderSide(
+                BorderSide(
+                  color: Colors.white.withOpacity(0.8),
+                  width: 1,
+                ),
+              ),
+            )
+          : null,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '12:00',
+            '$hourOfDay:00',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 16),
           SvgPicture.asset(
-            'assets/images/sun_small.svg',
+            _getWeatherImage(),
             height: 32,
             width: 32,
           ),
           const SizedBox(height: 16),
           Text(
-            '12°',
+            '$temperature°',
             style: Theme.of(context).textTheme.titleLarge,
           ),
         ],
@@ -365,12 +404,45 @@ class _CurrentHourWeather extends StatelessWidget {
 class _WindAndHumidity extends StatelessWidget {
   const _WindAndHumidity({Key? key}) : super(key: key);
 
+  String _getWindDirection(int windDegree) {
+    const directions = [
+      'северный',
+      'северо-восточный',
+      'восточный',
+      'юго-восточный',
+      'южный',
+      'юго-западный',
+      'западный',
+      'северо-западный',
+      'северный'
+    ];
+
+    final index = ((windDegree / 45) + 0.5).floor() % 8;
+    return directions[index];
+  }
+
+  String _getHumidityLevel(int humidity) {
+    if (humidity < 30) {
+      return 'Низкая влажность';
+    } else if (humidity < 60) {
+      return 'Средняя влажность';
+    } else {
+      return 'Высокая влажность';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final valueStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.bold,
           color: Colors.white.withOpacity(0.3),
         );
+
+    final state = context.read<WeatherBloc>().state as WeatherLoadSuccess;
+    final humidity = state.weatherForecast.currentWeather.humidity;
+    final humidityLevel = _getHumidityLevel(humidity);
+    final windSpeed = state.weatherForecast.currentWeather.windSpeed.ceil();
+    final windDirection = _getWindDirection(state.weatherForecast.currentWeather.windDeg);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -383,14 +455,14 @@ class _WindAndHumidity extends StatelessWidget {
         children: [
           Row(
             children: [
-              SizedBox(
-                width: 88,
+              ConstrainedBox(
+                constraints: const BoxConstraints(minWidth: 88),
                 child: Row(
                   children: [
                     SvgPicture.asset('assets/images/wind.svg'),
                     const SizedBox(width: 8),
                     Text(
-                      '2 м/с',
+                      '$windSpeed м/с',
                       style: valueStyle,
                     ),
                   ],
@@ -399,7 +471,7 @@ class _WindAndHumidity extends StatelessWidget {
               const SizedBox(width: 24),
               Expanded(
                   child: Text(
-                'Ветер северо-восточный',
+                'Ветер $windDirection',
                 style: Theme.of(context).textTheme.titleMedium,
               )),
             ],
@@ -407,14 +479,14 @@ class _WindAndHumidity extends StatelessWidget {
           const SizedBox(height: 17),
           Row(
             children: [
-              SizedBox(
-                width: 88,
+              ConstrainedBox(
+                constraints: const BoxConstraints(minWidth: 88),
                 child: Row(
                   children: [
                     SvgPicture.asset('assets/images/drop.svg'),
                     const SizedBox(width: 8),
                     Text(
-                      '100%',
+                      '$humidity%',
                       style: valueStyle,
                     ),
                   ],
@@ -422,10 +494,11 @@ class _WindAndHumidity extends StatelessWidget {
               ),
               const SizedBox(width: 24),
               Expanded(
-                  child: Text(
-                'Высокая влажность',
-                style: Theme.of(context).textTheme.titleMedium,
-              )),
+                child: Text(
+                  humidityLevel,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
             ],
           ),
         ],

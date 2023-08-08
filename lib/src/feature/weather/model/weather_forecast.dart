@@ -1,3 +1,5 @@
+import 'package:open_weather_app/src/feature/weather/model/weather.dart';
+
 /// Погода с прогнозом по часам
 class WeatherForecast {
   final double lat;
@@ -101,8 +103,9 @@ class HourlyWeather {
   final int windDeg;
   final double windGust;
   final double pop;
+  final Weather weather;
 
-  HourlyWeather({
+  HourlyWeather( {
     required this.dt,
     required this.temp,
     required this.feelsLike,
@@ -116,6 +119,7 @@ class HourlyWeather {
     required this.windDeg,
     required this.windGust,
     required this.pop,
+    required this.weather,
   });
 
   factory HourlyWeather.fromJson(Map<String, dynamic> json) {
@@ -133,6 +137,7 @@ class HourlyWeather {
       windDeg: json['wind_deg'],
       windGust: json['wind_gust'].toDouble(),
       pop: json['pop'].toDouble(),
+      weather: Weather.fromJson(json['weather'].first),
     );
   }
 }
