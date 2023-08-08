@@ -1,4 +1,4 @@
-# open_weather_app
+# OpenWeather app
 
 Приложение для просмотра погоды на основе геолокации с использованием API <a href="https://openweathermap.org/">OpenWeather</a>
 
