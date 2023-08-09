@@ -14,41 +14,59 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(82),
-          child: SizedBox(
-            height: 82,
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Вход',
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 28),
+    return BlocProvider(
+      create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
+      child: Scaffold(
+        body: BlocListener<LoginCubit, LoginState>(
+          listener: (context, state) {
+            if (state.status == LoginStatus.error) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: Colors.red,
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Введите данные для входа',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(color: kSecondaryTextColor),
+                );
+            }
+          },  
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(82),
+                  child: SizedBox(
+                    height: 82,
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Вход',
+                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 28),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'Введите данные для входа',
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: kSecondaryTextColor),
+                          ),
+                        ],
+                      ),
+                    ),  
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child: BlocProvider(
-            create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
-            child: const LoginForm(),
+              const SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                sliver: SliverToBoxAdapter(
+                  child: LoginForm(),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -61,30 +79,16 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
-      listener: (context, state) {
-        if (state.status == LoginStatus.error) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
-        }
-      },
-      child: Column(
-        children: [
-          _EmailInput(),
-          const SizedBox(height: 32),
-          _PasswordInput(),
-          const SizedBox(height: 48),
-          _LoginButton(),
-          const SizedBox(height: 18),
-          _SignUpButton(),
-        ],
-      ),
+    return Column(
+      children: [
+        _EmailInput(),
+        const SizedBox(height: 32),
+        _PasswordInput(),
+        const SizedBox(height: 48),
+        _LoginButton(),
+        const SizedBox(height: 18),
+        _SignUpButton(),
+      ],
     );
   }
 }
