@@ -60,32 +60,44 @@ class _WeatherScreenState extends State<WeatherScreen> {
         }, builder: (context, state) {
           late final Widget body;
           if (state is LocationInitial) {
-            body = const Text('Получение местоположения');
+            body = const SliverFillRemaining(
+              child: Center(
+                child: Text('Получение местоположения'),
+              ),
+            );
           } else if (state is LocationLoadSuccess) {
             final Position(latitude: lat, longitude: lon) = state.position;
             weatherBloc.add(WeatherLoadStarted(Coord(lon: lon, lat: lat)));
             body = const _Body();
           } else if (state is LocationLoadFailure) {
-            body = Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Не удалось получить местоположение'),
-                const SizedBox(height: 8),
-                TextButton(
-                  onPressed: () => context.read<LocationBloc>().add(const LocationStarted()),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.refresh),
-                      SizedBox(width: 8),
-                      Text('Повторить'),
-                    ],
-                  ),
+            body = SliverToBoxAdapter(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Не удалось получить местоположение'),
+                    const SizedBox(height: 8),
+                    TextButton(
+                      onPressed: () => context.read<LocationBloc>().add(const LocationStarted()),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.refresh),
+                          SizedBox(width: 8),
+                          Text('Повторить'),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             );
           } else {
-            body = const CircularProgressIndicator();
+            body = const SliverFillRemaining(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
           }
 
           return BlocProvider.value(
@@ -107,32 +119,36 @@ class _WeatherScreenState extends State<WeatherScreen> {
               ),
               child: Scaffold(
                 backgroundColor: Colors.transparent,
-                appBar: AppBar(
-                  title: BlocBuilder<WeatherBloc, WeatherState>(
-                    builder: (context, state) {
-                      return Row(
-                        children: [
-                          SvgPicture.asset('assets/images/pin.svg'),
-                          const SizedBox(width: 8),
-                          Text(
-                            state is WeatherLoadSuccess ? state.weatherData.name : '',
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.exit_to_app),
-                      onPressed: () => context.read<AuthenticationBloc>().add(
-                            const AuthenticationLogoutRequested(),
-                          ),
+                body: CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      title: BlocBuilder<WeatherBloc, WeatherState>(
+                        builder: (context, state) {
+                          return Row(
+                            children: [
+                              SvgPicture.asset('assets/images/pin.svg'),
+                              const SizedBox(width: 8),
+                              Text(
+                                state is WeatherLoadSuccess ? state.weatherData.name : '',
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      actions: [
+                        IconButton(
+                          icon: const Icon(Icons.exit_to_app),
+                          onPressed: () => context.read<AuthenticationBloc>().add(
+                                const AuthenticationLogoutRequested(),
+                              ),
+                        ),
+                      ],
                     ),
+                    body,
                   ],
                 ),
-                body: Center(child: body),
               ),
             ),
           );
@@ -178,76 +194,82 @@ class _Body extends StatelessWidget {
           final Main(:temp, :tempMin, :tempMax) = state.weatherData.main;
           final Weather(main: weatherName, :description) = state.weatherData.weather.first;
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 270,
-                  width: 270,
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: RadialGradient(
-                              colors: [
-                                Colors.white.withOpacity(0.9),
-                                Colors.white.withOpacity(0.5),
-                                Colors.white.withOpacity(0.3),
-                                Colors.white.withOpacity(0.2),
-                                Colors.white.withOpacity(0.1),
-                                Colors.white.withOpacity(0.05),
-                                Colors.transparent,
-                              ],
-                              center: Alignment.center,
-                              radius: 0.5,
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 270,
+                    width: 270,
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: RadialGradient(
+                                colors: [
+                                  Colors.white.withOpacity(0.9),
+                                  Colors.white.withOpacity(0.5),
+                                  Colors.white.withOpacity(0.3),
+                                  Colors.white.withOpacity(0.2),
+                                  Colors.white.withOpacity(0.1),
+                                  Colors.white.withOpacity(0.05),
+                                  Colors.transparent,
+                                ],
+                                center: Alignment.center,
+                                radius: 0.5,
+                              ),
                             ),
                           ),
                         ),
+                        Center(
+                          child: Image.asset(
+                            _getWeatherImage(weatherName),
+                            height: 180,
+                            width: 180,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        '${temp.toInt()}°',
+                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 64),
                       ),
-                      Center(
-                        child: Image.asset(
-                          _getWeatherImage(weatherName),
-                          height: 180,
-                          width: 180,
-                          fit: BoxFit.cover,
-                        ),
-                      )
+                      const SizedBox(height: 8),
+                      Text(
+                        description.characters.first.toUpperCase() + description.substring(1),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Макс.: ${tempMin.toInt()}° Мин: ${tempMax.toInt()}°',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 24),
+                      const _Forecast(),
+                      const SizedBox(height: 24),
+                      const _WindAndHumidity(),
+                      const SizedBox(height: 24),
                     ],
                   ),
-                ),
-                Column(
-                  children: [
-                    Text(
-                      '${temp.toInt()}°',
-                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 64),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      description.characters.first.toUpperCase() + description.substring(1),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Макс.: ${tempMin.toInt()}° Мин: ${tempMax.toInt()}°',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 24),
-                    const _Forecast(),
-                    const SizedBox(height: 24),
-                    const _WindAndHumidity(),
-                    const SizedBox(height: 24),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           );
         } else if (state is WeatherLoadInProgress) {
-          return const Center(child: CircularProgressIndicator());
+          return const SliverFillRemaining(child: Center(child: CircularProgressIndicator()));
         } else if (state is WeatherLoadFailure) {
-          return Text('Не удалось получить погоду:\n${state.message}');
+          return SliverFillRemaining(
+            child: Center(
+              child: Text('Не удалось получить погоду:\n${state.message}'),
+            ),
+          );
         } else {
-          return const SizedBox.shrink();
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
         }
       },
     );
