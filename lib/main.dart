@@ -26,7 +26,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final apiClient = ApiClient();
-    
+
     return RepositoryProvider(
       create: (context) => AuthenticationRepository(),
       child: RepositoryProvider(
@@ -52,7 +52,7 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: appTheme,
+      theme: lightTheme,
       home: FlowBuilder<AuthStatus>(
         state: context.select((AuthenticationBloc bloc) => bloc.state.status),
         onGeneratePages: onGenerateAppViewPages,

@@ -53,23 +53,14 @@ class _SplashScreenState extends State<SplashScreen> {
     final now = DateTime.now();
     final slogan = _getSlogan(now);
 
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [kGradientColor, Colors.black],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          textTheme: TextTheme(
-            headlineLarge: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: Colors.white,
-                ),
-            titleLarge: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                ),
+    return MaterialApp(
+      theme: darkTheme,
+      home: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [kGradientColor, Colors.black],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
         child: Scaffold(
@@ -82,7 +73,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
-                  // color: Colors.white,
                 ),
               ),
             ),
@@ -96,12 +86,12 @@ class _SplashScreenState extends State<SplashScreen> {
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w300,
-                  // color: Colors.white,
                 ),
               ),
             ),
           ],
         ),
+        // ),
       ),
     );
   }

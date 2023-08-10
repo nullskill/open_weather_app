@@ -19,7 +19,7 @@ class ActionButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: inverted ? Colors.grey[200] : kActiveTextColor,
-        foregroundColor: inverted ? kActiveTextColor : Colors.white,
+        foregroundColor: inverted ? kActiveTextColor : kWhiteColor,
         minimumSize: const Size.fromHeight(48),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),

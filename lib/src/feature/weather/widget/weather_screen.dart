@@ -41,82 +41,63 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     final gradientColor = kGradientColor.withOpacity(0.4392);
 
-    return BlocProvider(
-      create: (context) => LocationBloc()..add(const LocationStarted()),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [gradientColor, gradientColor, Colors.black],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    return MaterialApp(
+      theme: darkTheme,
+      home: BlocProvider(
+        create: (context) => LocationBloc()..add(const LocationStarted()),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [gradientColor, gradientColor, Colors.black],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
-        child: BlocConsumer<LocationBloc, LocationState>(listener: (context, state) {
-          if (state is LocationLoadFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
-          }
-        }, builder: (context, state) {
-          late final Widget body;
-          if (state is LocationInitial) {
-            body = const SliverFillRemaining(
-              child: Center(
-                child: Text('Получение местоположения'),
-              ),
-            );
-          } else if (state is LocationLoadSuccess) {
-            final Position(latitude: lat, longitude: lon) = state.position;
-            weatherBloc.add(WeatherLoadStarted(Coord(lon: lon, lat: lat)));
-            body = const _Body();
-          } else if (state is LocationLoadFailure) {
-            body = SliverFillRemaining(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Не удалось получить местоположение'),
-                    const SizedBox(height: 8),
-                    TextButton(
-                      onPressed: () => context.read<LocationBloc>().add(const LocationStarted()),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.refresh),
-                          SizedBox(width: 8),
-                          Text('Повторить'),
-                        ],
+          child: BlocConsumer<LocationBloc, LocationState>(listener: (context, state) {
+            if (state is LocationLoadFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            }
+          }, builder: (context, state) {
+            late final Widget body;
+            if (state is LocationInitial) {
+              body = const SliverToBoxAdapter(child: SizedBox.shrink());
+            } else if (state is LocationLoadSuccess) {
+              final Position(latitude: lat, longitude: lon) = state.position;
+              weatherBloc.add(WeatherLoadStarted(Coord(lon: lon, lat: lat)));
+              body = const _Body();
+            } else if (state is LocationLoadFailure) {
+              body = SliverFillRemaining(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Не удалось получить местоположение'),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: () => context.read<LocationBloc>().add(const LocationStarted()),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.refresh),
+                            SizedBox(width: 8),
+                            Text('Повторить'),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            body = const SliverFillRemaining(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
+              );
+            } else {
+              body = const SliverFillRemaining(
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
 
-          return BlocProvider.value(
-            value: weatherBloc,
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                colorScheme: Theme.of(context).colorScheme.copyWith(
-                      primary: Colors.white,
-                      secondary: Colors.white,
-                    ),
-                textTheme: TextTheme(
-                  headlineLarge: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        color: Colors.white,
-                      ),
-                  titleLarge: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.white,
-                      ),
-                ),
-              ),
+            return BlocProvider.value(
+              value: weatherBloc,
               child: Scaffold(
                 backgroundColor: Colors.transparent,
                 body: CustomScrollView(
@@ -150,9 +131,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ],
                 ),
               ),
-            ),
-          );
-        }),
+              // ),
+            );
+          }),
+        ),
       ),
     );
   }
@@ -208,12 +190,12 @@ class _Body extends StatelessWidget {
                             decoration: BoxDecoration(
                               gradient: RadialGradient(
                                 colors: [
-                                  Colors.white.withOpacity(0.9),
-                                  Colors.white.withOpacity(0.5),
-                                  Colors.white.withOpacity(0.3),
-                                  Colors.white.withOpacity(0.2),
-                                  Colors.white.withOpacity(0.1),
-                                  Colors.white.withOpacity(0.05),
+                                  kWhiteColor.withOpacity(0.9),
+                                  kWhiteColor.withOpacity(0.5),
+                                  kWhiteColor.withOpacity(0.3),
+                                  kWhiteColor.withOpacity(0.2),
+                                  kWhiteColor.withOpacity(0.1),
+                                  kWhiteColor.withOpacity(0.05),
                                   Colors.transparent,
                                 ],
                                 center: Alignment.center,
@@ -297,7 +279,7 @@ class _Forecast extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: kWhiteColor.withOpacity(0.2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -319,7 +301,7 @@ class _Forecast extends StatelessWidget {
             ),
           ),
           Divider(
-            color: Colors.white.withOpacity(0.8),
+            color: kWhiteColor.withOpacity(0.8),
             thickness: 1,
             height: 1,
           ),
@@ -389,11 +371,11 @@ class _HourWeather extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: isCurrent
           ? BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: kWhiteColor.withOpacity(0.2),
               borderRadius: BorderRadius.circular(12),
               border: Border.fromBorderSide(
                 BorderSide(
-                  color: Colors.white.withOpacity(0.8),
+                  color: kWhiteColor.withOpacity(0.8),
                   width: 1,
                 ),
               ),
@@ -457,7 +439,7 @@ class _WindAndHumidity extends StatelessWidget {
   Widget build(BuildContext context) {
     final valueStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.bold,
-          color: Colors.white.withOpacity(0.3),
+          color: kWhiteColor.withOpacity(0.3),
         );
 
     final state = context.read<WeatherBloc>().state as WeatherLoadSuccess;
@@ -470,7 +452,7 @@ class _WindAndHumidity extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: kWhiteColor.withOpacity(0.2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(

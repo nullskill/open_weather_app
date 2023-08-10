@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_weather_app/src/feature/authentication/data/authentication_repository.dart';
 import 'package:open_weather_app/src/feature/authentication/model/firebase_auth_exception.dart';
