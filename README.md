@@ -5,6 +5,7 @@
 ## Скриншоты
 
 <div>
+  <img src="https://github.com/nullskill/open_weather_app/blob/main/screenshot/screenshot0.png" alt="Open weather app" width="220" height="439">
   <img src="https://github.com/nullskill/open_weather_app/blob/main/screenshot/screenshot1.png" alt="Open weather app" width="220" height="439">
   <img src="https://github.com/nullskill/open_weather_app/blob/main/screenshot/screenshot2.png" alt="Open weather app" width="220" height="439">
   <img src="https://github.com/nullskill/open_weather_app/blob/main/screenshot/screenshot3.png" alt="Open weather app" width="220" height="439">
