@@ -8,6 +8,7 @@ import 'package:open_weather_app/src/common/routes/routes.dart';
 import 'package:open_weather_app/src/common/theme/theme.dart';
 import 'package:open_weather_app/src/feature/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:open_weather_app/src/feature/authentication/data/authentication_repository.dart';
+import 'package:open_weather_app/src/feature/splash/widget/splash_screen.dart';
 import 'package:open_weather_app/src/feature/weather/data/weather_repository.dart';
 
 void main() async {
@@ -35,7 +36,7 @@ class App extends StatelessWidget {
             authRepository: context.read<AuthenticationRepository>(),
           ),
           child: const MaterialApp(
-            home: Main(),
+            home: SplashScreen(),
           ),
         ),
       ),
