@@ -261,19 +261,30 @@ class _Body extends StatelessWidget {
 class _Forecast extends StatelessWidget {
   const _Forecast({Key? key}) : super(key: key);
 
-  int _getHourOfDay(int dt) {
+  DateTime _getNow() => DateTime.now();
+
+  DateTime _getForecastDate(int dt) {
     final date = DateTime.fromMillisecondsSinceEpoch(dt * 1000);
-    return date.hour;
+    return date;
+  }
+
+  int _getHourOfDay(int dt) => _getForecastDate(dt).hour;
+
+  bool _isCurrentHourOfDay(int dt) {
+    final now = _getNow();
+    final date = _getForecastDate(dt);
+    return date.day == now.day && date.hour == now.hour;
+  }
+
+  String _getCurrentDateFormatted() {
+    initializeDateFormatting();
+    final formatter = DateFormat('d MMMM', 'ru');
+    return formatter.format(_getNow());
   }
 
   @override
   Widget build(BuildContext context) {
-    initializeDateFormatting();
-    final now = DateTime.now();
-    final formatter = DateFormat('d MMMM', 'ru');
-    final formattedDate = formatter.format(now);
-
-    final state = context.read<WeatherBloc>().state as WeatherLoadSuccess;
+     final state = context.read<WeatherBloc>().state as WeatherLoadSuccess;
     final hourlyWeather = state.weatherForecast.hourlyWeather;
 
     return Container(
@@ -294,7 +305,7 @@ class _Forecast extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 Text(
-                  formattedDate,
+                  _getCurrentDateFormatted(),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
@@ -314,12 +325,11 @@ class _Forecast extends StatelessWidget {
                 itemCount: hourlyWeather.length,
                 itemBuilder: (context, index) {
                   final hourWeather = hourlyWeather[index];
-                  final hourOfDay = _getHourOfDay(hourWeather.dt);
                   return _HourWeather(
-                    hourOfDay: hourOfDay,
+                    hourOfDay: _getHourOfDay(hourWeather.dt),
                     temperature: hourWeather.temp.toInt(),
                     weather: hourWeather.weather,
-                    isCurrent: hourOfDay == now.hour,
+                    isCurrent: _isCurrentHourOfDay(hourWeather.dt),
                   );
                 },
               ),
