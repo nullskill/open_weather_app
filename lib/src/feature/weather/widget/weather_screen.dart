@@ -70,7 +70,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
             weatherBloc.add(WeatherLoadStarted(Coord(lon: lon, lat: lat)));
             body = const _Body();
           } else if (state is LocationLoadFailure) {
-            body = SliverToBoxAdapter(
+            body = SliverFillRemaining(
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
