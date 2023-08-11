@@ -54,10 +54,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
             ),
           ),
           child: BlocConsumer<LocationBloc, LocationState>(listener: (context, state) {
+            if (state is LocationLoadSuccess) {
+              ScaffoldMessenger.of(context).clearSnackBars();
+            }
             if (state is LocationLoadFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              ScaffoldMessenger.of(context)
+                ..clearSnackBars()
+                ..showSnackBar(
+                  SnackBar(content: Text(state.message)),
+                );
             }
           }, builder: (context, state) {
             late final Widget body;
@@ -284,7 +289,7 @@ class _Forecast extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final state = context.read<WeatherBloc>().state as WeatherLoadSuccess;
+    final state = context.read<WeatherBloc>().state as WeatherLoadSuccess;
     final hourlyWeather = state.weatherForecast.hourlyWeather;
 
     return Container(
