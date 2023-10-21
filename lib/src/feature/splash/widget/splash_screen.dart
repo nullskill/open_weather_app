@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:open_weather_app/main.dart';
 import 'package:open_weather_app/src/common/routes/fade_transition.dart';
 import 'package:open_weather_app/src/common/theme/theme.dart';
+import 'package:open_weather_app/src/feature/main/widget/main_screen.dart';
 
 /// SplashScreen widget
 class SplashScreen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(seconds: 3),
       () => Navigator.pushReplacement(
         context,
-        FadePageRoute(builder: (context) => const Main()),
+        FadePageRoute(builder: (context) => const MainScreen()),
       ),
     );
   }
